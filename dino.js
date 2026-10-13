@@ -11,9 +11,9 @@ const DINO_FRAME_COUNT = 2;
 const FRAME_TIME = 100;
 
 const dinoRunFrames = Array.from({ length: DINO_FRAME_COUNT }, (_, index) => {
-    const image = new Image();
-    image.src = `./imgs/dino-run-${index}.png`;
-    return image;
+  const image = new Image();
+  image.src = `./imgs/dino-run-${index}.png`;
+  return image;
 });
 
 let isJumping;
@@ -29,6 +29,9 @@ export function setupDino() {
   setCustomProperty(dinoElem, `--bottom`, 0);
   document.removeEventListener(`keydown`, onJump);
   document.addEventListener(`keydown`, onJump);
+
+  document.removeEventListener(`pointerdown`, onJump);
+  document.addEventListener(`pointerdown`, onJump);
 }
 
 export function updateDino(delta, speedScale) {
@@ -49,9 +52,11 @@ function handleRun(delta, speedScale) {
     dinoElem.src = `imgs/dino-stationary.png`;
     return;
   }
-  if (!dinoRunFrames.every(image => image.complete && image.naturalWidth > 0)) {
+  if (
+    !dinoRunFrames.every((image) => image.complete && image.naturalWidth > 0)
+  ) {
     return;
-}
+  }
   if (currentFrameTime >= FRAME_TIME) {
     dinoFrame = (dinoFrame + 1) % DINO_FRAME_COUNT;
     dinoElem.src = dinoRunFrames[dinoFrame].src;
@@ -74,7 +79,7 @@ function handleJump(delta) {
 }
 
 function onJump(e) {
-    if(e.code !== `Space` || isJumping) return;
-    yVelocity = JUMP_SPEED;
-    isJumping = true;
+  if ((e.type === `keydown` && e.code !== `Space`) || isJumping) return;
+  yVelocity = JUMP_SPEED;
+  isJumping = true;
 }
