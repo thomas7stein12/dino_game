@@ -10,6 +10,12 @@ const GRAVITY = 0.0015;
 const DINO_FRAME_COUNT = 2;
 const FRAME_TIME = 100;
 
+const dinoRunFrames = Array.from({ length: DINO_FRAME_COUNT }, (_, index) => {
+    const image = new Image();
+    image.src = `./imgs/dino-run-${index}.png`;
+    return image;
+});
+
 let isJumping;
 let dinoFrame;
 let currentFrameTime;
@@ -17,6 +23,7 @@ let yVelocity;
 export function setupDino() {
   isJumping = false;
   dinoFrame = 0;
+  dinoElem.src = dinoRunFrames[0].src;
   currentFrameTime = 0;
   yVelocity = 0;
   setCustomProperty(dinoElem, `--bottom`, 0);
@@ -42,9 +49,12 @@ function handleRun(delta, speedScale) {
     dinoElem.src = `imgs/dino-stationary.png`;
     return;
   }
+  if (!dinoRunFrames.every(image => image.complete && image.naturalWidth > 0)) {
+    return;
+}
   if (currentFrameTime >= FRAME_TIME) {
     dinoFrame = (dinoFrame + 1) % DINO_FRAME_COUNT;
-    dinoElem.src = `imgs/dino-run-${dinoFrame}.png`;
+    dinoElem.src = dinoRunFrames[dinoFrame].src;
     currentFrameTime -= FRAME_TIME;
   }
   currentFrameTime += delta * speedScale;
