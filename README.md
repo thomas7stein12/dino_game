@@ -36,6 +36,4 @@ This game is a small step in that direction. It's all about learning by doing an
 
 ---
 
-**Status:** In development 🚧
-
 Thanks for checking out Dino Game!
